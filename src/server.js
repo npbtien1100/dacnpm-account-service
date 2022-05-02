@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser";
 import routes from "./routes/main.routes";
 import authRouter from "./auth/auth.router";
 //import userRouter from "./users/userRouter";
-import adminRouter from "./admins/adminRouter";
+import adminRouter from './admins/admin.controller';
 //import sellerRouter from "./seller/sellerRouter";
 
 import passport from "passport";

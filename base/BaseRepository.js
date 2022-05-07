@@ -1,6 +1,6 @@
 import autoBind from "auto-bind";
 
-class BaseSequelize {
+class BaseRepository {
   constructor(model) {
     this.model = model;
     autoBind(this);
@@ -9,7 +9,7 @@ class BaseSequelize {
   async findOneByEmail(email) {
     try {
       const foundUser = await this.model.findOne({ email: email });
-      
+
       if (foundUser) {
         return {
           isSuccess: true,
@@ -17,20 +17,20 @@ class BaseSequelize {
         };
       } else {
         return {
-          isSuccess: false
+          isSuccess: false,
         };
       }
     } catch (error) {
       console.error(error);
       return {
-        isSuccess: false
+        isSuccess: false,
       };
     }
   }
 
   async create(data) {
     try {
-      const item = await this.model(data).save();
+      await this.model.create(data);
 
       return {
         isSuccess: true,
@@ -46,4 +46,4 @@ class BaseSequelize {
   }
 }
 
-export default BaseSequelize;
+export default BaseRepository;

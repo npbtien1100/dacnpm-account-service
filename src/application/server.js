@@ -5,18 +5,16 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
 // routes
-import routes from "./routes/main.routes";
-import authRouter from "./auth/auth.router";
 //import userRouter from "./users/userRouter";
-import adminRouter from './admins/admin.controller';
+import adminRouter from "./admin/AdminRouter";
 //import sellerRouter from "./seller/sellerRouter";
 
 import passport from "passport";
-import configPassport from "../config/passport";
+import configPassport from "../../config/passport";
 configPassport(passport);
 
 //DB config
-import db from "../config/db.config";
+import db from "../../config/MySQLConfig";
 import cors from "cors";
 
 //set up cors
@@ -34,7 +32,7 @@ const corsOptions = {
 // consts
 const app = express();
 
-//db.sync().then(console.log("Syncing Database Done!"));
+db.sync().then(console.log("Syncing Database Done!"));
 app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
@@ -43,8 +41,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
 
-app.use("/", routes);
-app.use("/api/auth", authRouter);
+// app.use("/", routes);
+// app.use("/api/auth", authRouter);
 //app.use("/api/users", userRouter);
 app.use("/api/admin", adminRouter);
 //app.use("/api/seller", sellerRouter);

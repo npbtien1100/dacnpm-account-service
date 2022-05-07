@@ -7,8 +7,8 @@
   "scripts": {
     "test": "mocha test --reporter mochawesome --reporter-options autoOpen=true --experimental-modules --es-module-specifier-resolution=node --timeout 10000",
     "build": "node_modules/babel/bin/babel.js src --source-maps --out-dir dist",
-    "start": "node --experimental-modules --es-module-specifier-resolution=node  src/server.js",
-    "dev": "nodemon --experimental-modules --es-module-specifier-resolution=node  src/server.js"
+    "start": "node --experimental-modules --es-module-specifier-resolution=node  src/application/server.js",
+    "dev": "nodemon --experimental-modules --es-module-specifier-resolution=node  src/application/server.js"
   },
   "author": "",
   "license": "ISC",

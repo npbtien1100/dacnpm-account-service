@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../../../config/MySQLConfig";
 
-class Admin extends Model {}
+class Admin extends Model { }
 Admin.init(
   {
     fullName: {
@@ -27,23 +27,7 @@ Admin.init(
   {
     sequelize,
     modelName: "admin",
-  }
+  },
 );
 
 export default Admin;
-
-// import mongoose from 'mongoose';
-
-// const adminSchema = new mongoose.Schema(
-//   {
-//     fullName: { type: String, required: true },
-//     email: { type: String, unique: true, required: true },
-//     password: { type: String, required: true },
-//     address: { type: String },
-//     phone: { type: String },
-//   },
-//   { timestamps: true }
-// );
-
-// const AdminModel = mongoose.model('Admin', adminSchema);
-// export default AdminModel;

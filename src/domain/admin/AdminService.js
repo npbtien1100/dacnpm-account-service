@@ -1,7 +1,7 @@
 // Handle business
 import autoBind from "auto-bind";
 
-import { createAdmin } from "./AdminFactory";
+import createAdmin from "./AdminFactory";
 import { hashPassword } from "../../utils/Utility";
 import BaseService from "../../../base/BaseService";
 import AdminRepository from "../../infrastructure/admin/AdminRepository";
@@ -30,7 +30,7 @@ class AdminService extends BaseService {
       return response;
     }
 
-    //Check Email Exist
+    // Check Email Exist
     const checkEmailResult = await this.repository.findOneByEmail(data.email);
 
     if (checkEmailResult.isSuccess) {
@@ -42,13 +42,12 @@ class AdminService extends BaseService {
       return response;
     }
 
-    //HashPassword
+    // HashPassword
     newAdmin.info.password = await hashPassword(newAdmin.info.password);
 
-    //Create new admin
+    // Create new admin
     const result = await this.repository.create(newAdmin.info);
     if (!result.isSuccess) {
-      speechSynthesis;
       response.statusCode = 500;
       response.json = {
         message: result.message,

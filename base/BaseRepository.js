@@ -8,18 +8,17 @@ class BaseRepository {
 
   async findOneByEmail(email) {
     try {
-      const foundUser = await this.model.findOne({ email: email });
+      const foundUser = await this.model.findOne({ email });
 
       if (foundUser) {
         return {
           isSuccess: true,
           data: foundUser,
         };
-      } else {
-        return {
-          isSuccess: false,
-        };
       }
+      return {
+        isSuccess: false,
+      };
     } catch (error) {
       console.error(error);
       return {

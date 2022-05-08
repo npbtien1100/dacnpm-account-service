@@ -25,11 +25,11 @@ const createAdmin = (data) => {
       data.password,
       data.fullName,
       data.phone,
-      data.address
+      data.address,
     );
   }
 
   return newAdmin;
 };
 
-export { createAdmin };
+export default createAdmin;

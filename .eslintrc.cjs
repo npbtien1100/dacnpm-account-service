@@ -14,5 +14,6 @@ module.exports = {
     "max-len": ["error", { code: 100 }],
     "object-property-newline": "error",
     quotes: ["error", "double"],
+    "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
   },
 };

@@ -1,13 +1,14 @@
-"use strict";
+/* eslint-disable class-methods-use-this */
 const defaultExcludedItemsFromResponse = ["__v", "password"];
 
 export default class HttpResponse {
-  error = false;
-  responseTimestamp = new Date();
+  // error = false;
+
+  // responseTimestamp = new Date();
 
   constructor(
     data,
-    options = { totalCount: 0, statusCode: 200, deleted: null }
+    options = { totalCount: 0, statusCode: 200, deleted: null },
   ) {
     this.statusCode = options.statusCode || 200;
     let filteredData = data;
@@ -30,13 +31,11 @@ export default class HttpResponse {
 
   filterData(data) {
     if (Array.isArray(data)) {
-      data.map((x, index) => {
-        Object.keys(x).forEach((key) => {
-          if (defaultExcludedItemsFromResponse.includes(key)) {
-            delete data[index][key];
-          }
-        });
-      });
+      data.map((x, index) => Object.keys(x).forEach((key) => {
+        if (defaultExcludedItemsFromResponse.includes(key)) {
+          delete data[index][key];
+        }
+      }));
     } else if (typeof data === "object") {
       Object.keys(data).forEach((key) => {
         if (defaultExcludedItemsFromResponse.includes(key)) {

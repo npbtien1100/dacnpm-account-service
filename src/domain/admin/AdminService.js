@@ -1,15 +1,16 @@
+// Handle business
 import autoBind from "auto-bind";
-import BaseSevice from "../../base/BaseService";
 
-import { createAdmin } from "./admin.factory";
-import AdminSequelize from "./admin.sequelize";
-import { hashPassword } from "../../helper/Utility";
+import createAdmin from "./AdminFactory";
+import { hashPassword } from "../../utils/Utility";
+import BaseService from "../../../base/BaseService";
+import AdminRepository from "../../infrastructure/admin/AdminRepository";
 
-const adminSequelize = new AdminSequelize();
+const adminRepository = new AdminRepository();
 
-class AdminService extends BaseSevice {
+class AdminService extends BaseService {
   constructor() {
-    super(adminSequelize);
+    super(adminRepository);
     autoBind(this);
   }
 
@@ -17,39 +18,39 @@ class AdminService extends BaseSevice {
     const response = {
       json: null,
       statusCode: null,
-    }
+    };
 
     // Validate data and create object
     const newAdmin = createAdmin(data);
     if (newAdmin.errMessage) {
       response.statusCode = 400;
       response.json = {
-        message: newAdmin.errMessage      
+        message: newAdmin.errMessage,
       };
       return response;
     }
 
-    //Check Email Exist
-    const checkEmailResult = await this.sequelize.findOneByEmail(data.email);
+    // Check Email Exist
+    const checkEmailResult = await this.repository.findOneByEmail(data.email);
 
     if (checkEmailResult.isSuccess) {
       response.statusCode = 400;
       response.json = {
         success: false,
-        message: "Email has already registered",      
+        message: "Email has already registered",
       };
       return response;
     }
 
-    //HashPassword
+    // HashPassword
     newAdmin.info.password = await hashPassword(newAdmin.info.password);
 
-    //Create new admin
-    const result = await this.sequelize.create(newAdmin.info);
-    if (!result.isSuccess) {speechSynthesis
+    // Create new admin
+    const result = await this.repository.create(newAdmin.info);
+    if (!result.isSuccess) {
       response.statusCode = 500;
       response.json = {
-        message: result.message,      
+        message: result.message,
       };
       return response;
     }

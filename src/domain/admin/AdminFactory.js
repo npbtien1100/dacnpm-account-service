@@ -1,6 +1,5 @@
 import joi from "@hapi/joi";
-
-import { Admin } from "./admin.domainModel";
+import { Admin } from "./AdminDomainModel";
 
 const createAdmin = (data) => {
   const admin = joi.object({
@@ -13,7 +12,7 @@ const createAdmin = (data) => {
 
   const newAdmin = {
     info: {},
-    errMessage: '',
+    errMessage: "",
   };
   const validationResult = admin.validate(data);
 
@@ -21,10 +20,16 @@ const createAdmin = (data) => {
     console.log(validationResult.error.details[0].message);
     newAdmin.errMessage = validationResult.error.details[0].message;
   } else {
-    newAdmin.info = new Admin(data.email, data.password, data.fullName, data.phone, data.address);
+    newAdmin.info = new Admin(
+      data.email,
+      data.password,
+      data.fullName,
+      data.phone,
+      data.address,
+    );
   }
 
   return newAdmin;
-}
+};
 
-export { createAdmin };
+export default createAdmin;

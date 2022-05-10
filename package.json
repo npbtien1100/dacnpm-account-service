@@ -5,10 +5,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha test --reporter mochawesome --reporter-options autoOpen=true --experimental-modules --es-module-specifier-resolution=node --timeout 10000",
+    "test": "mocha './{,!(node_modules)/**}/*.test.js' --reporter mochawesome --reporter-options autoOpen=true --experimental-modules --es-module-specifier-resolution=node --timeout 10000",
     "build": "node_modules/babel/bin/babel.js src --source-maps --out-dir dist",
-    "start": "node --experimental-modules --es-module-specifier-resolution=node  src/server.js",
-    "dev": "nodemon --experimental-modules --es-module-specifier-resolution=node  src/server.js"
+    "start": "node --experimental-modules --es-module-specifier-resolution=node  src/application/server.js",
+    "dev": "nodemon --experimental-modules --es-module-specifier-resolution=node  src/application/server.js",
+    "pre-commit": "lint-staged",
+    "prepare": "husky install"
   },
   "author": "",
   "license": "ISC",
@@ -54,7 +56,17 @@
     "sequelize": "^6.7.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.17.0",
     "babel": "5.8.29",
+    "eslint": "^8.15.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.4.1",
     "nodemon": "1.8.0"
+  },
+  "lint-staged": {
+    "*.+(js)": [
+      "eslint --fix"
+    ]
   }
 }

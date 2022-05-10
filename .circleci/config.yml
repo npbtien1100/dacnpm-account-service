@@ -3,6 +3,7 @@
 version: 2.1
 orbs:
   node: circleci/node@4.7.0
+  heroku: circleci/heroku@1.2.6
 
 jobs:
   build_and_test:
@@ -23,7 +24,24 @@ jobs:
           root: ~/project
           paths:
             - .
+  deploy:
+    docker:
+      - image: cimg/node:17.2.0
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - heroku/deploy-via-git: 
+          force: true
+
 workflows:
   build_on_commit:
     jobs:
       - build_and_test
+      - deploy
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: 
+                - main
+                - develop

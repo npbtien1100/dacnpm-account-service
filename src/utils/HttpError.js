@@ -1,41 +1,42 @@
 export default class HttpError {
-  error = true;
-  responseTimestamp = new Date();
+  // error = true;
+
+  // responseTimestamp = new Date();
 
   constructor(error) {
-    if (typeof error === 'string') {
+    if (typeof error === "string") {
       this.statusCode = 500;
       this.message = error;
-      this.name = 'InternalServerError';
+      this.name = "InternalServerError";
     } else {
-      if (error.name === 'ValidationError') {
+      if (error.name === "ValidationError") {
         error.statusCode = 422;
       }
 
-      if (error.code === 'ECONNREFUSED') {
-        error.message = 'Can not connect the data server';
+      if (error.code === "ECONNREFUSED") {
+        error.message = "Can not connect the data server";
       }
 
-      let errorName = 'InternalServerError';
+      let errorName = "InternalServerError";
 
       switch (error.statusCode) {
         case 422:
-          errorName = 'ValidationError';
+          errorName = "ValidationError";
           break;
         case 401:
-          errorName = 'UnauthorizedError';
+          errorName = "UnauthorizedError";
           break;
         case 403:
-          errorName = 'ForbiddenError';
+          errorName = "ForbiddenError";
           break;
         case 404:
-          errorName = 'NotFoundError';
+          errorName = "NotFoundError";
           break;
         default:
-          errorName = 'InternalServerError';
+          errorName = "InternalServerError";
       }
       this.statusCode = error.statusCode ? error.statusCode : 500;
-      this.message = error.message || 'Something wrong!';
+      this.message = error.message || "Something wrong!";
       this.errors = error.errors;
       this.name = errorName;
     }

@@ -15,5 +15,6 @@ module.exports = {
     "object-property-newline": "error",
     quotes: ["error", "double"],
     "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
+    "no-param-reassign": [0],
   },
 };

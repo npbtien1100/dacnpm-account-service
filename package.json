@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha './{,!(node_modules)/**}/*.test.js' --reporter mochawesome --reporter-options autoOpen=true --experimental-modules --es-module-specifier-resolution=node --timeout 10000",
+    "test": "mocha './{,!(node_modules)/**}/*.test.mjs' --reporter mochawesome --reporter-options autoOpen=true --experimental-modules --es-module-specifier-resolution=node --timeout 10000",
     "build": "node_modules/babel/bin/babel.js src --source-maps --out-dir dist",
     "start": "node --experimental-modules --es-module-specifier-resolution=node  src/application/server.js",
     "dev": "nodemon --experimental-modules --es-module-specifier-resolution=node  src/application/server.js",
@@ -44,7 +44,6 @@
     "multer": "^1.4.4",
     "mysql2": "^2.3.3-rc.0",
     "nodemailer": "^6.7.3",
-    "nodemon": "^2.0.15",
     "npm-run-all": "^4.1.5",
     "passport": "^0.5.2",
     "passport-facebook": "^3.0.0",
@@ -62,7 +61,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.4.1",
-    "nodemon": "1.8.0"
+    "nodemon": "^2.0.16"
   },
   "lint-staged": {
     "*.+(js)": [

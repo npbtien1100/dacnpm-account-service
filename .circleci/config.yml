@@ -28,9 +28,11 @@ jobs:
     docker:
       - image: cimg/node:17.2.0
     steps:
+      - checkout
+      - heroku/install
       - attach_workspace:
           at: ~/project
-      - heroku/deploy-via-git: 
+      - heroku/deploy-via-git:
           force: true
 
 workflows:

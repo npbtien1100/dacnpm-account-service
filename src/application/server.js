@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser";
 // import userRouter from "./users/userRouter";
 import passport from "passport";
 import cors from "cors";
-import adminRouter from "./admin/AdminRouter";
+import adminRouter from "./account/admin/AdminRouter";
 // import sellerRouter from "./seller/sellerRouter";
 
 import configPassport from "../../config/passport";

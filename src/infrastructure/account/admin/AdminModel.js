@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../../../config/MySQLConfig";
+import sequelize from "../../../../config/MySQLConfig";
 
 class Admin extends Model { }
 Admin.init(

@@ -4,3 +4,4 @@ dist
 .env
 .env.demo
 mysql.txt
+/mochawesome-report

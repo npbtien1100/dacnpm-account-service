@@ -2,9 +2,11 @@
 import autoBind from "auto-bind";
 
 import createAdmin from "./AdminFactory";
-import { hashPassword } from "../../utils/Utility";
-import BaseService from "../../../base/BaseService";
-import AdminRepository from "../../infrastructure/admin/AdminRepository";
+import { hashPassword } from "../../../utils/Utility";
+import BaseService from "../../../../base/BaseService";
+import AdminRepository from "../../../infrastructure/account/admin/AdminRepository";
+import HttpError from "../../../utils/HttpError";
+import HttpResponse from "../../../utils/HttpResponse";
 
 const adminRepository = new AdminRepository();
 
@@ -23,23 +25,14 @@ class AdminService extends BaseService {
     // Validate data and create object
     const newAdmin = createAdmin(data);
     if (newAdmin.errMessage) {
-      response.statusCode = 400;
-      response.json = {
-        message: newAdmin.errMessage,
-      };
-      return response;
+      return new HttpError({statusCode: 400, message: newAdmin.errMessage});
     }
 
     // Check Email Exist
     const checkEmailResult = await this.repository.findOneByEmail(data.email);
 
-    if (checkEmailResult.isSuccess) {
-      response.statusCode = 400;
-      response.json = {
-        success: false,
-        message: "Email has already registered",
-      };
-      return response;
+    if (!checkEmailResult.isSuccess) {
+      return new HttpError({statusCode: 400, message: "Email has already registered"});
     }
 
     // HashPassword
@@ -48,16 +41,12 @@ class AdminService extends BaseService {
     // Create new admin
     const result = await this.repository.create(newAdmin.info);
     if (!result.isSuccess) {
-      response.statusCode = 500;
-      response.json = {
-        message: result.message,
-      };
-      return response;
+      return new HttpError(result.message);
     }
 
     response.json = result;
     response.statusCode = 200;
-    return response;
+    return new HttpResponse(result);
   }
 }
 

@@ -11,4 +11,11 @@ router.post("/register", async (req, res) => {
   res.status(result.statusCode).json(result.json);
 });
 
+router.get("/data", async (req, res) => {
+  const data = req.query;
+  console.log(data);
+  res.status(200).json({ id: "get it" });
+}
+);
+
 export default router;

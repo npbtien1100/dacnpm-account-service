@@ -103,7 +103,7 @@ class AdminService extends BaseSevice {
     }
 
     // check email exist
-    const checkEmailResult = await this.sequelize.findOneByEmail(email.email);
+    const checkEmailResult = await this.sequelize.findOneByEmailAdmin(newAdmin.info.email);
     if (checkEmailResult.isSuccess) {
       response.statusCode = 400;
       response.json = {

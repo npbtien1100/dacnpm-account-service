@@ -14,6 +14,11 @@ class BaseService {
     return await this.sequelize.findOneByEmail(email);
   }
 
+  // find only admin email
+  async findOneByEmailAdmin(email) {
+    return await this.sequelize.findOneByEmailAdmin(email);
+  }
+
   // create HtthResponse
 }
 

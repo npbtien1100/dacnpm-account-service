@@ -44,6 +44,28 @@ class BaseSequelize {
       };
     }
   }
+
+  async findOneByEmailAdmin(email) {
+    try {
+      const foundUser = await this.model.findOne({ email: email, role: 'admin' });
+
+      if (foundUser) {
+        return {
+          isSuccess: true,
+          data: foundUser,
+        };
+      } else {
+        return {
+          isSuccess: false,
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        isSuccess: false
+      };
+    }
+  }
 }
 
 export default BaseSequelize;

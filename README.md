@@ -23,6 +23,10 @@ npm run build
 
 ```
 
+# API route Guide
+
+to add a admin by email: POST /admin/creation (body must contain an email)
+
 > Brought to you with love, from us at [500Tech](http://500Tech.com) - Israel's leading AngularJS consultancy
 
 ## License

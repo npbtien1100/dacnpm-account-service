@@ -14,7 +14,8 @@ router.post("/register", async (req, res) => {
 router.get("/data", async (req, res) => {
   const data = req.query;
   console.log(data);
-  res.status(200).json({ id: "get it" });
+  const result = await adminService.findOneByEmail(data.email);
+  res.status(result.statusCode).json(result.json);
 }
 );
 

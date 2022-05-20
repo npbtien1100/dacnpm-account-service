@@ -13,6 +13,7 @@ class AdminService extends BaseSevice {
     autoBind(this);
   }
 
+  // service for create admin document in db with all data in form
   async createAnAdmin(data) {
     const response = {
       json: null,
@@ -24,7 +25,7 @@ class AdminService extends BaseSevice {
     if (newAdmin.errMessage) {
       response.statusCode = 400;
       response.json = {
-        message: newAdmin.errMessage      
+        message: newAdmin.errMessage
       };
       return response;
     }
@@ -36,7 +37,7 @@ class AdminService extends BaseSevice {
       response.statusCode = 400;
       response.json = {
         success: false,
-        message: "Email has already registered",      
+        message: "Email has already registered",
       };
       return response;
     }
@@ -46,10 +47,33 @@ class AdminService extends BaseSevice {
 
     //Create new admin
     const result = await this.sequelize.create(newAdmin.info);
-    if (!result.isSuccess) {speechSynthesis
+    if (!result.isSuccess) {
+      speechSynthesis
       response.statusCode = 500;
       response.json = {
-        message: result.message,      
+        message: result.message,
+      };
+      return response;
+    }
+
+    response.json = result;
+    response.statusCode = 200;
+    return response;
+  }
+
+  // service for search for an admin document in db with a unique email
+  async findOneByEmail(email) {
+    const response = {
+      json: null,
+      statusCode: null,
+    }
+
+    // call repository  to find a admin document by email 
+    const result = await this.sequelize.findOneByEmail(email);
+    if (!result.isSuccess) {
+      response.statusCode = 500;
+      response.json = {
+        message: result.message,
       };
       return response;
     }
@@ -59,5 +83,7 @@ class AdminService extends BaseSevice {
     return response;
   }
 }
+
+
 
 export default new AdminService();

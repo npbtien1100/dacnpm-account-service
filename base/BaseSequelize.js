@@ -9,7 +9,7 @@ class BaseSequelize {
   async findOneByEmail(email) {
     try {
       const foundUser = await this.model.findOne({ email: email });
-      
+
       if (foundUser) {
         return {
           isSuccess: true,
@@ -17,7 +17,7 @@ class BaseSequelize {
         };
       } else {
         return {
-          isSuccess: false
+          isSuccess: false,
         };
       }
     } catch (error) {

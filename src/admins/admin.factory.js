@@ -27,4 +27,30 @@ const createAdmin = (data) => {
   return newAdmin;
 }
 
-export { createAdmin };
+
+// this object is for create an admin just form an email
+const adminEmail = (data) => {
+  // create a joi object with validate for email (require @ and .com)
+  const admin = joi.object({
+    email: joi.string().email().required(),
+    password: joi.string().optional(),
+    fullName: joi.string().min(2).max(50).optional(),
+  });
+
+  const newAdmin = {
+    info: {},
+    errMessage: '',
+  };
+  const validationResult = admin.validate(data);
+
+  if (validationResult.error) {
+    console.log(validationResult.error.details[0].message);
+    newAdmin.errMessage = validationResult.error.details[0].message;
+  } else {
+    newAdmin.info = new Admin(data.email);
+  }
+
+  return newAdmin;
+}
+
+export { createAdmin, adminEmail };

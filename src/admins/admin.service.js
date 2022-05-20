@@ -1,7 +1,7 @@
 import autoBind from "auto-bind";
 import BaseSevice from "../../base/BaseService";
-
-import { createAdmin } from "./admin.factory";
+import generator from "generate-password";
+import { createAdmin, adminEmail } from "./admin.factory";
 import AdminSequelize from "./admin.sequelize";
 import { hashPassword } from "../../helper/Utility";
 
@@ -79,6 +79,70 @@ class AdminService extends BaseSevice {
     }
 
     response.json = result;
+    response.statusCode = 200;
+    return response;
+  }
+
+  //------------------------------------------------------------------------------------------------------------------------------------------
+
+  // service for create admin document in db with email , password will be auto generate and send to email
+  async createAdminByEmail(email) {
+    const response = {
+      statusCode: null,
+      json: null,
+    }
+
+    // validate and create a object with factory
+    const newAdmin = adminEmail(email);
+    if (newAdmin.errMessage) {
+      response.statusCode = 400;
+      response.json = {
+        message: newAdmin.errMessage
+      };
+      return response;
+    }
+
+    // check email exist
+    const checkEmailResult = await this.sequelize.findOneByEmail(email.email);
+    if (checkEmailResult.isSuccess) {
+      response.statusCode = 400;
+      response.json = {
+        success: false,
+        message: "Email has already registered",
+      };
+      return response;
+    };
+
+    // generate password for client
+    const password = generator.generate({
+      length: 8,
+      numbers: true,
+    })
+
+    // hash the password
+    newAdmin.info.password = await hashPassword(password);
+
+    // add a dump admin name
+    newAdmin.info.fullName = "Admin";
+
+    // create new admin
+    const result = await this.sequelize.create(newAdmin.info);
+
+    // if fail: return error
+    if (!result.isSuccess) {
+      response.statusCode = 500;
+      response.json = {
+        message: result.message,
+      };
+      return response;
+    }
+
+    // send new password to client
+    response.json = {
+      success: true,
+      password: password,
+      result: result,
+    }
     response.statusCode = 200;
     return response;
   }

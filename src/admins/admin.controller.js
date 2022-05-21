@@ -8,6 +8,7 @@ const router = express.Router();
 
 
 router.post("/register", async (req, res) => {
+  /* this route is for traditional register*/
   const data = req.body
   const result = await adminService.createAnAdmin(data);
 

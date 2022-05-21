@@ -125,6 +125,9 @@ class AdminService extends BaseSevice {
     // add a dump admin name
     newAdmin.info.fullName = "Admin";
 
+    // add admin role
+    newAdmin.info.role = "admin";
+
     // create new admin
     const result = await this.sequelize.create(newAdmin.info);
 

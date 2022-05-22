@@ -2,9 +2,10 @@
 import autoBind from "auto-bind";
 
 import createAdmin from "./AdminFactory";
-import { hashPassword } from "../../utils/Utility";
+// import { hashPassword } from "../../utils/Utility";
 import BaseService from "../../../base/BaseService";
 import AdminRepository from "../../infrastructure/admin/AdminRepository";
+import { validPassword, hashPassword, makeCode } from "../../../helper/Utility.js";
 
 const adminRepository = new AdminRepository();
 
@@ -57,6 +58,52 @@ class AdminService extends BaseService {
 
     response.json = result;
     response.statusCode = 200;
+    return response;
+  }
+
+  async loginAdmin(data) {
+    const response = {
+      json: null,
+      statusCode: null,
+    };
+
+    // thiếu validate cho login admin
+
+    // Check Email Exist
+    const admin = await this.repository.findOneByEmail(data.email);
+    if (!admin.isSuccess) {
+      response.statusCode = 400;
+      response.json = {
+        error: true,
+        message: "The email you entered is not registered.",
+      };
+      return response;
+    }
+
+    //Check Password
+    console.log("Password " + admin.data.password);
+    const isValid = await validPassword(data.password, admin.data.password);
+    if (!isValid) {
+      response.statusCode = 400;
+      response.json = {
+        error: true,
+        message: "The password you entered is not correct.",
+      };
+      return response;
+    }
+
+    //JWT
+    const token = jwt.sign({ id: admin.data.id }, process.env.JWT_SECRET, {
+      expiresIn: 10000000,
+    });
+
+    response.statusCode = 200;
+    response.json = {
+      success: true,
+      id: admin.id,
+      token: token,
+      expiresIn: 10000000,
+    }
     return response;
   }
 }

@@ -15,6 +15,19 @@ const responseAfterAuthorizing = (req, res, next) => {
   const strUser = JSON.stringify(user);
   res.render("callback", { layout: false, response: strUser });
 };
+
+// default auth route
+router.get("/", authenticateByJwt, (req, res, next) => {
+  console.log("user: " + req.user.id + " is accessing");
+  const respone = {
+    error: false,
+    message: "You are authorized",
+  }
+  res.json(respone);
+});
+
+
+
 router.get("/test", authenticateByJwt, responseAfterAuthorizing);
 router.get("/get-token", (req, res, next) => {
   const response = createJWT({ id: 1 });

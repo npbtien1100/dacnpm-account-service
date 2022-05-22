@@ -3,7 +3,7 @@ import BaseSevice from "../../base/BaseService";
 import generator from "generate-password";
 import { createAdmin, adminEmail } from "./admin.factory";
 import AdminSequelize from "./admin.sequelize";
-import { hashPassword } from "../../helper/Utility";
+import { hashPassword, generateToken } from "../../helper/Utility";
 
 const adminSequelize = new AdminSequelize();
 
@@ -182,8 +182,14 @@ class AdminService extends BaseSevice {
     }
 
     // create JWT token
+    const token = await generateToken(result.data);
 
-    response.json = result;
+    // send the token with bearer head to client
+    response.json = {
+      success: true,
+      message: "Login success",
+      token: "Bearer " + token,
+    };
     response.statusCode = 200;
     return response;
   }

@@ -37,6 +37,13 @@ export const makeCode = (length) => {
 };
 
 export const generateToken = (data) => {
-  const token = jwt.sign(data, process.env.JWT_SECRET);
+  const expiresTime = "" + process.env.JWT_EXPIRES_IN;
+  // prepare token
+  const payload = {
+    id: data.id,
+    email: data.email,
+    fullName: data.fullName,
+  }
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: expiresTime });
   return token;
 }

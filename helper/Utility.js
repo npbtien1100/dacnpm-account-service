@@ -1,5 +1,6 @@
 "use strict";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const slugify = (text) => {
   return text
@@ -34,3 +35,8 @@ export const makeCode = (length) => {
   }
   return result;
 };
+
+export const generateToken = (data) => {
+  const token = jwt.sign(data, process.env.JWT_SECRET);
+  return token;
+}

@@ -70,6 +70,7 @@ class AdminService extends BaseSevice {
 
     // call repository  to find a admin document by email 
     const result = await this.sequelize.findOneByEmail(email);
+    // if fail return error
     if (!result.isSuccess) {
       response.statusCode = 500;
       response.json = {
@@ -146,6 +147,43 @@ class AdminService extends BaseSevice {
       password: password,
       result: result,
     }
+    response.statusCode = 200;
+    return response;
+  }
+
+  //---------------------------------------------------------------------------------------------------------------------------------------
+  async login(data) {
+    // deserialize data
+    const { email, password } = data;
+
+    const response = {
+      json: null,
+      statusCode: null,
+    }
+
+    // find admin by email
+    const result = await this.sequelize.findOneByEmail(email);
+    if (!result.isSuccess) {
+      response.statusCode = 500;
+      response.json = {
+        message: result.message,
+      };
+      return response;
+    }
+
+    // decrypt password and compare with the password
+    const compareResult = await hashPassword(password, result.data.password);
+    if (!compareResult) {
+      response.statusCode = 400;
+      response.json = {
+        message: "Wrong password",
+      };
+      return response;
+    }
+
+    // create JWT token
+
+    response.json = result;
     response.statusCode = 200;
     return response;
   }

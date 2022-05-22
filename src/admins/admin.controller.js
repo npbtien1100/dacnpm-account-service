@@ -2,6 +2,9 @@ import express from "express";
 
 import adminService from "./admin.service";
 
+import passport from "passport";
+
+import "./passportConfig";
 
 
 const router = express.Router();
@@ -23,6 +26,13 @@ router.get("/data", async (req, res) => {
 }
 );
 
+router.post("/login", async (req, res) => {
+  /* this route is for traditional login*/
+  const data = req.body
+  const result = await adminService.login(data);
+
+  res.status(result.statusCode).json(result.json);
+});
 
 
 

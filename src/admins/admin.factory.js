@@ -35,7 +35,7 @@ const adminEmail = (data) => {
     email: joi.string().email().required(),
     password: joi.string().optional(),
     fullName: joi.string().min(2).max(50).optional(),
-    role: joi.string().optional().enum['admin', 'user'],
+    role: joi.string().optional().valid(['admin', 'user']),
   });
 
   const newAdmin = {

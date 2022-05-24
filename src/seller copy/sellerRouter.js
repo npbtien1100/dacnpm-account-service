@@ -4,7 +4,11 @@ import sellerController from "./sellerController";
 import SellerValidation from "./sellerValidate";
 const router = express.Router();
 
-router.post("/register", SellerValidation.registerValidation, sellerController.createASeller);
+router.post(
+  "/register",
+  SellerValidation.registerValidation,
+  sellerController.createASeller
+);
 router.post("/login", sellerController.handleLogin);
 
 router.get("/", sellerController.getAll);

@@ -8,7 +8,7 @@ class BaseRepository {
 
   async findOneByEmail(email) {
     try {
-      const foundUser = await this.model.findOne({ email });
+      const foundUser = await this.model.findOne({where: {email: email}});
 
       if (foundUser) {
         return {

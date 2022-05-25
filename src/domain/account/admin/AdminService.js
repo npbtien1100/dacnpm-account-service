@@ -1,11 +1,11 @@
 // Handle business
 import autoBind from "auto-bind";
+import {loginAdmin, createAdmin} from "./AdminFactory";
+import BaseService from "../../../../base/BaseService";
+import AdminRepository from "../../../infrastructure/account/admin/AdminRepository";
+import { validPassword, hashPassword, makeCode } from "../../../../helper/Utility.js";
+import { createJWT } from "../../../auth/auth.services";
 
-import createAdmin from "./AdminFactory";
-// import { hashPassword } from "../../utils/Utility";
-import BaseService from "../../../base/BaseService";
-import AdminRepository from "../../infrastructure/admin/AdminRepository";
-import { validPassword, hashPassword, makeCode } from "../../../helper/Utility.js";
 
 const adminRepository = new AdminRepository();
 
@@ -22,19 +22,21 @@ class AdminService extends BaseService {
     };
 
     // Validate data and create object
-    const newAdmin = createAdmin(data);
-    if (newAdmin.errMessage) {
+    const newAdmin = await createAdmin(data);
+    if(newAdmin.error) {
       response.statusCode = 400;
       response.json = {
-        message: newAdmin.errMessage,
+        message: newAdmin.Message,
       };
       return response;
     }
 
     // Check Email Exist
-    const checkEmailResult = await this.repository.findOneByEmail(data.email);
+    const checkEmailResult = await adminRepository.findOneByEmail(data.email);
 
-    if (checkEmailResult.isSuccess) {
+    console.log(checkEmailResult)
+
+    if(checkEmailResult.isSuccess){
       response.statusCode = 400;
       response.json = {
         success: false,
@@ -47,7 +49,7 @@ class AdminService extends BaseService {
     newAdmin.info.password = await hashPassword(newAdmin.info.password);
 
     // Create new admin
-    const result = await this.repository.create(newAdmin.info);
+    const result = await adminRepository.create(newAdmin.info);
     if (!result.isSuccess) {
       response.statusCode = 500;
       response.json = {
@@ -67,10 +69,19 @@ class AdminService extends BaseService {
       statusCode: null,
     };
 
-    // thiếu validate cho login admin
+    // Validate
+
+    const result = await loginAdmin(data)
+    if (result.error) {
+      response.statusCode = 400;
+      response.json = {
+        message: result.message,
+      };
+      return response;
+    }
 
     // Check Email Exist
-    const admin = await this.repository.findOneByEmail(data.email);
+    const admin = await adminRepository.findOneByEmail(data.email);
     if (!admin.isSuccess) {
       response.statusCode = 400;
       response.json = {
@@ -81,7 +92,6 @@ class AdminService extends BaseService {
     }
 
     //Check Password
-    console.log("Password " + admin.data.password);
     const isValid = await validPassword(data.password, admin.data.password);
     if (!isValid) {
       response.statusCode = 400;
@@ -93,14 +103,16 @@ class AdminService extends BaseService {
     }
 
     //JWT
-    const token = jwt.sign({ id: admin.data.id }, process.env.JWT_SECRET, {
-      expiresIn: 10000000,
-    });
+    const token = createJWT({ id: admin.data.id });
 
     response.statusCode = 200;
+
+    let user = admin.data
+    user.password = ''
+
     response.json = {
       success: true,
-      id: admin.id,
+      user: user,
       token: token,
       expiresIn: 10000000,
     }

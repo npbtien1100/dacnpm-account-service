@@ -1,12 +1,12 @@
-import AdminService from "../../../domain/admin/AdminService.js";
+import AdminService from "../../../domain/account/admin/AdminService.js";
 import BaseController from "../../../../base/BaseController.js";
 import autoBind from "auto-bind";
 
-const adminService = new AdminService();
+// const adminService = new AdminService();
 
 class AdminController extends BaseController {
   constructor() {
-    super(adminService);
+    super(AdminService);
     autoBind(this);
   }
 
@@ -14,7 +14,6 @@ class AdminController extends BaseController {
     try {
       const data = req.body;
       const result = await AdminService.loginAdmin(data);
-      
       res.status(result.statusCode).json(result.json);
     } catch (error) {
       console.log(error);

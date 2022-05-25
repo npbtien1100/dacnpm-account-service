@@ -50,7 +50,6 @@ class SellerController extends BaseController {
       res.status(500).send(error);
     }
   }
-
   async uploadVideo(req, res, next) {
     try {
       console.log("file: " + req.file.path);

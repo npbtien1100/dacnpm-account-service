@@ -1,8 +1,8 @@
 import joi from "@hapi/joi";
-import { Admin } from "./AdminDomainModel";
+import { Seller } from "./SellerDomainModel";
 
-export const createAdmin = async (data) => {
-  const admin = joi.object({
+export const createSeller = async (data) => {
+  const seller = joi.object({
     phone: joi.optional(),
     address: joi.string().optional(),
     password: joi.string().required(),
@@ -10,18 +10,18 @@ export const createAdmin = async (data) => {
     fullName: joi.string().min(2).max(50).required(),
   });
 
-  const newAdmin = {
+  const newSeller = {
     info: {},
     Message: "",
     error: false
   };
-  const validationResult = admin.validate(data);
+  const validationResult = seller.validate(data);
 
   if (validationResult.error) {
-    newAdmin.error = true
-    newAdmin.Message = validationResult.error.details[0].message;
+    newSeller.error = true
+    newSeller.Message = validationResult.error.details[0].message;
   } else {
-    newAdmin.info = new Admin(
+    newSeller.info = new Seller(
       data.email,
       data.password,
       data.fullName,
@@ -30,16 +30,16 @@ export const createAdmin = async (data) => {
     );
   }
 
-  return newAdmin;
+  return newSeller;
 };
 
-export const loginAdmin = async (data) => {
-  const admin = joi.object({
+export const loginSeller = async (data) => {
+  const seller = joi.object({
     password: joi.string().required(),
     email: joi.string().email().required(),
   });
 
-  const validationResult = admin.validate(data);
+  const validationResult = seller.validate(data);
 
   let result = {
     error: false,

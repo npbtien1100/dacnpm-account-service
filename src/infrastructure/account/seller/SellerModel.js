@@ -1,48 +1,55 @@
-import { Model } from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import sequelize from "../../../../config/MySQLConfig";
 
-class Seller extends Model { }
+class Seller extends Model {}
 Seller.init(
   {
     email: {
-      type: String,
+      type: DataTypes.STRING,
       default: "",
-      unique: true,
     },
     name: {
-      type: String,
+      type: DataTypes.STRING,
       default: "",
     },
     phone: {
-      type: String,
+      type: DataTypes.STRING,
       default: "",
     },
     password: {
-      type: String,
+      type: DataTypes.STRING,
       default: "",
     },
     idCardNumber: {
-      type: String,
+      type: DataTypes.STRING,
       default: "",
     },
     taxCode: {
-      type: String,
+      type: DataTypes.STRING,
       default: "",
     },
     address: {
-      type: String,
+      type: DataTypes.STRING,
       default: "",
     },
     frontIdCardImage: {
-      type: String,
+      type: DataTypes.STRING,
       default: "",
     },
     backIdCardImage: {
-      type: String,
+      type: DataTypes.STRING,
       default: "",
     },
     portrait: {
-      type: String,
+      type: DataTypes.STRING,
+      default: "",
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      default: false,
+    },
+    code: {
+      type: DataTypes.STRING,
       default: "",
     },
   },

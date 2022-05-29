@@ -1,14 +1,27 @@
 export class Seller {
-  constructor(email, name, phone, password, idCardNumber, taxCode, address, frontIdCardImage, backIdCardImage, portrait) {
+  constructor(
+    email,
+    password,
+    fullName,
+    phone,
+    idCardNumber,
+    taxCode,
+    address,
+    frontIdCardImage,
+    backIdCardImage,
+    portrait,
+    isVerified
+  ) {
     this.email = email;
-    this.name = name;
-    this.phone = phone;
     this.password = password;
+    this.fullName = fullName;
+    this.phone = phone;
     this.idCardNumber = idCardNumber;
     this.taxCode = taxCode;
     this.address = address;
     this.frontIdCardImage = frontIdCardImage;
-    this.backIdCardImage = frontIdCardImage;
+    this.backIdCardImage = backIdCardImage;
     this.portrait = portrait;
+    this.isVerified = isVerified;
   }
 }

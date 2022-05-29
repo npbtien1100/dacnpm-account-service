@@ -2,7 +2,7 @@
 import chaiHttp from "chai-http";
 import chai, { expect } from "chai";
 
-import {createAdmin} from "../AdminFactory";
+import { createAdmin } from "../AdminFactory";
 
 chai.use(chaiHttp);
 

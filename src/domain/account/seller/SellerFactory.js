@@ -13,20 +13,19 @@ export const createSeller = async (data) => {
   const newSeller = {
     info: {},
     Message: "",
-    error: false
+    error: false,
   };
   const validationResult = seller.validate(data);
 
   if (validationResult.error) {
-    newSeller.error = true
+    newSeller.error = true;
     newSeller.Message = validationResult.error.details[0].message;
   } else {
     newSeller.info = new Seller(
       data.email,
       data.password,
       data.fullName,
-      data.phone,
-      data.address,
+      data.phone
     );
   }
 
@@ -43,12 +42,12 @@ export const loginSeller = async (data) => {
 
   let result = {
     error: false,
-    message: ''
-  }
+    message: "",
+  };
 
-  if(validationResult.error){
-    result.message = validationResult.error.details[0].message
-    result.error = true
+  if (validationResult.error) {
+    result.message = validationResult.error.details[0].message;
+    result.error = true;
   }
   return result;
 };

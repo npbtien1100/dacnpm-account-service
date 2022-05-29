@@ -22,10 +22,10 @@ class AdminController extends BaseController {
 
   async register(req, res, next) {
     try {
-        const data = req.body;
-        const result = await AdminService.createAnAdmin(data);
-      
-        res.status(result.statusCode).json(result.json);
+      const data = req.body;
+      const result = await AdminService.createAnAdmin(data);
+
+      res.status(result.statusCode).json(result.json);
     } catch (error) {
       console.log(error);
     }

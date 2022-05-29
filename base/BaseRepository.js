@@ -8,7 +8,10 @@ class BaseRepository {
 
   async findOneByEmail(email) {
     try {
-      const foundUser = await this.model.findOne({where: {email: email}});
+      const foundUser = await this.model.findOne({
+        where: { email: email },
+        raw: true,
+      });
 
       if (foundUser) {
         return {
@@ -33,7 +36,7 @@ class BaseRepository {
 
       return {
         isSuccess: true,
-        message: "Register new admin successfully!",
+        message: "Register new successfully!",
       };
     } catch (error) {
       console.error(error);

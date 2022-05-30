@@ -43,6 +43,24 @@ class BaseRepository {
       };
     }
   }
+
+  async createMany(dataArray) {
+    try {
+      await this.model.bulkCreate(dataArray);
+      return {
+        isSuccess: true,
+        message: `Create ${this.model.tableName}s successfully!`,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        isSuccess: false,
+        error:
+          error.message
+          || `Some error occurred while creating ${this.model.tableName}s`,
+      };
+    }
+  }
 }
 
 export default BaseRepository;

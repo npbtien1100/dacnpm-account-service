@@ -1,6 +1,6 @@
 // Handle business
 import autoBind from "auto-bind";
-import {loginAdmin, createAdmin} from "./AdminFactory";
+import { loginAdmin, createAdmin } from "./AdminFactory";
 import BaseService from "../../../../base/BaseService";
 import AdminRepository from "../../../infrastructure/account/admin/AdminRepository";
 import { validPassword, hashPassword, makeCode } from "../../../../helper/Utility.js";
@@ -23,7 +23,7 @@ class AdminService extends BaseService {
 
     // Validate data and create object
     const newAdmin = await createAdmin(data);
-    if(newAdmin.error) {
+    if (newAdmin.error) {
       response.statusCode = 400;
       response.json = {
         message: newAdmin.Message,
@@ -36,7 +36,7 @@ class AdminService extends BaseService {
 
     console.log(checkEmailResult)
 
-    if(checkEmailResult.isSuccess){
+    if (checkEmailResult.isSuccess) {
       response.statusCode = 400;
       response.json = {
         success: false,
@@ -116,6 +116,25 @@ class AdminService extends BaseService {
       token: token,
       expiresIn: 10000000,
     }
+    return response;
+  }
+
+  async getAll(page, limit) {
+    const response = {
+      json: null,
+      statusCode: null,
+    };
+
+    const result = await adminRepository.findAll(page, limit);
+    if (!result) {
+      response.statusCode = 500;
+      response.json = {
+        message: "Error when get all admin",
+      };
+      return response;
+    }
+    response.json = result;
+    response.statusCode = 200;
     return response;
   }
 }

@@ -8,6 +8,17 @@ class AdminRepository extends BaseRepository {
     super(AdminModel);
     autoBind(this);
   }
+
+  async findAll(page, limit) {
+    const result = await this.model.findAll(
+      {
+        offset: page,
+        limit: limit,
+        raw: true
+      }
+    );
+    return result;
+  }
 }
 
 export default AdminRepository;

@@ -19,6 +19,14 @@ class AdminRepository extends BaseRepository {
     );
     return result;
   }
+
+  async findOneByID(id) {
+    const result = await this.model.findOne({
+      where: { id: id },
+      raw: true
+    });
+    return result;
+  }
 }
 
 export default AdminRepository;

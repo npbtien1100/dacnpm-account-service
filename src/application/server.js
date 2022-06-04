@@ -8,8 +8,8 @@ import cookieParser from "cookie-parser";
 // import userRouter from "./users/userRouter";
 import passport from "passport";
 import cors from "cors";
-import adminRouter from "./admin/AdminRouter";
-// import sellerRouter from "./seller/sellerRouter";
+import adminRouter from "./account/admin/AdminRouter";
+import sellerRouter from "./account/seller/SellerRouter";
 
 import configPassport from "../../config/passport";
 
@@ -46,7 +46,7 @@ app.use(passport.initialize());
 // app.use("/api/auth", authRouter);
 // app.use("/api/users", userRouter);
 app.use("/api/admin", adminRouter);
-// app.use("/api/seller", sellerRouter);
+app.use("/api/seller", sellerRouter);
 // arrow functions
 const port = process.env.PORT || 5000;
 const server = app.listen(port, () => {

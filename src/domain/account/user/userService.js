@@ -1,7 +1,7 @@
 import autoBind from "auto-bind";
-import { loginAdmin, createAdmin } from "./AdminFactory";
+import { createUser } from "./UserFactory";
 import BaseService from "../../../../base/BaseService";
-import UserRepository from "../../../infrastructure/account/user/userRepository";
+import UserRepository from "../../../infrastructure/account/user/UserRepository";
 import { validPassword, hashPassword, makeCode } from "../../../../helper/Utility.js";
 import { createJWT } from "../../../auth/auth.services";
 import generator from 'generate-password';
@@ -98,4 +98,28 @@ class UserService extends BaseService {
             return response;
         }
     }
+
+    // get all user 
+    async getAll(page) {
+        const response = {
+            json: null,
+            statusCode: null,
+        };
+
+        const offset = parseInt(process.env.PAGE_LIMIT) * page
+        const result = await userRepository.findAll(offset, parseInt(process.env.PAGE_LIMIT));
+        if (!result) {
+            response.statusCode = 500;
+            response.json = {
+                message: result.message,
+            };
+            return response;
+        }
+
+        response.statusCode = 200;
+        response.json = result;
+        return response;
+    }
 }
+
+export default new UserService();

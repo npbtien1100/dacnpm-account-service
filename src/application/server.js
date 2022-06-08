@@ -10,6 +10,7 @@ import passport from "passport";
 import cors from "cors";
 import adminRouter from "./account/admin/AdminRouter";
 import sellerRouter from "./account/seller/SellerRouter";
+import userRouter from "./account/user/UserRouter";
 
 import configPassport from "../../config/passport";
 
@@ -47,6 +48,7 @@ app.use(passport.initialize());
 // app.use("/api/users", userRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/seller", sellerRouter);
+app.use("/api/user", userRouter);
 // arrow functions
 const port = process.env.PORT || 5000;
 const server = app.listen(port, () => {

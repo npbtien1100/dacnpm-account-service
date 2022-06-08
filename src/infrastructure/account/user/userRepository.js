@@ -1,6 +1,6 @@
 import autoBind from "auto-bind";
 
-import UserModel from "./userModel";
+import UserModel from "./UserModel";
 import BaseRepository from "../../../../base/BaseRepository";
 
 class UserRepository extends BaseRepository {
@@ -9,10 +9,10 @@ class UserRepository extends BaseRepository {
         autoBind(this);
     }
 
-    async findAll(page, limit) {
+    async findAll(offset, limit) {
         const result = await this.model.findAll(
             {
-                offset: page,
+                offset: offset,
                 limit: limit,
                 raw: true
             }

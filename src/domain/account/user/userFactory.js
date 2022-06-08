@@ -1,4 +1,4 @@
-import { User } from './userDomainModel';
+import { User } from './UserDomainModel';
 
 export const createUser = async (data) => {
     const user = joi.object({

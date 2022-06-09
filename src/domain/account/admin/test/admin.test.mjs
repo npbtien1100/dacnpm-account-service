@@ -2,13 +2,13 @@
 import chaiHttp from "chai-http";
 import chai, { expect } from "chai";
 
-import createAdmin from "../AdminFactory";
+import { createAdmin } from "../AdminFactory";
 
 chai.use(chaiHttp);
 
 describe("Validate admin", () => {
-  it("it should correct when validates admin", () => {
-    const res = createAdmin({
+  it("it should correct when validates admin", async () => {
+    const res = await createAdmin({
       fullName: "Nguyen Van A",
       email: "vana@gmail.com",
       password: "123456",
@@ -24,7 +24,8 @@ describe("Validate admin", () => {
         phone: "0123456789",
         address: "TPHCM",
       },
-      errMessage: "",
+      Message: "",
+      error: false
     });
   });
 });

@@ -1,4 +1,4 @@
-"use strict";
+"use-strict";
 import bcrypt from "bcrypt";
 
 export const slugify = (text) => {
@@ -20,11 +20,11 @@ export const validPassword = async (password, hash) => {
 };
 
 export const hashPassword = async (password) => {
-  const hash = await bcrypt.hash(password, salt);
-  return hash;
+  console.log(password);
+  return await bcrypt.hash(password, salt);
 };
 
-export const makeCode = (length) => {
+export const makeCode = (length = 30) => {
   var result = "";
   var characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

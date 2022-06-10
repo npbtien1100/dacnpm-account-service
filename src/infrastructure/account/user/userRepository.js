@@ -20,7 +20,7 @@ class UserRepository extends BaseRepository {
         return result;
     }
 
-    async findOneByID(id) {
+    async findOneById(id) {
         const result = await this.model.findOne({
             where: { id: id },
             raw: true

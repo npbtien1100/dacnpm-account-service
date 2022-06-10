@@ -97,6 +97,19 @@ class UserService extends BaseService {
             };
             return response;
         }
+        // create token
+        const payload = {
+            id: checkEmailResult.data.id,
+            email: checkEmailResult.data.email,
+            name: checkEmailResult.data.name,
+        }
+        const jwtToken = await createJWT(payload);
+        response.statusCode = 200;
+        response.json = {
+            success: true,
+            token: jwtToken,
+        }
+        return response;
     }
 
     // get all user 
@@ -108,6 +121,46 @@ class UserService extends BaseService {
 
         const offset = parseInt(process.env.PAGE_LIMIT) * page
         const result = await userRepository.findAll(offset, parseInt(process.env.PAGE_LIMIT));
+        if (!result) {
+            response.statusCode = 500;
+            response.json = {
+                message: result.message,
+            };
+            return response;
+        }
+
+        response.statusCode = 200;
+        response.json = result;
+        return response;
+    }
+
+    // get user by id
+    async getUserById(id) {
+        const response = {
+            json: null,
+            statusCode: null,
+        };
+        const result = await userRepository.findOneById(id);
+        if (!result) {
+            response.statusCode = 500;
+            response.json = {
+                message: result.message,
+            };
+            return response;
+        }
+
+        response.statusCode = 200;
+        response.json = result;
+        return response;
+    }
+
+    // get user by email
+    async getUserByEmail(email) {
+        const response = {
+            json: null,
+            statusCode: null,
+        };
+        const result = await userRepository.findOneByEmail(email);
         if (!result) {
             response.statusCode = 500;
             response.json = {

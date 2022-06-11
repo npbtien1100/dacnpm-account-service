@@ -9,6 +9,7 @@ message Empty {}
 message Admin{
     // các số 1 2 3 4 là các số viết theo định dạng của file proto. Do protocol
     // buffer lưu dữ liệu dưới dạng binary nên ta phải định danh các field bằng số này 
+    string id = 1;
     string fullName = 2;
     string password = 3;
     string email = 4;

@@ -27,17 +27,18 @@ const adminProto = grpc.loadPackageDefinition(packageDefinition);
 grpcServer.addService(adminProto.AdminService.service, {
     List: async (_, callback) => {
         const result = await adminService.getAll();
-        callback(null, result);
+        callback(null, result.json);
     },
-    Get: async (request, callback) => {
-        const result = await adminService.getOne(request.id);
-        callback(null, result);
+    Get: async (call, callback) => {
+        const id = call.request.id;
+        const result = await adminService.getOne(id);
+        callback(null, result.json);
     },
-    Check: async (request, callback) => {
-        const result = await adminService.check(request.id);
-        callback(null, result);
+    Check: async (call, callback) => {
+        const stringId = "" + call.request.id;
+        const result = await adminService.check(stringId);
+        callback(null, result.json);
     }
-
 }
 );
 

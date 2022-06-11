@@ -1,5 +1,5 @@
 import autoBind from "auto-bind";
-import { createUser } from "./UserFactory";
+import { createValidate, loginValidate} from "./UserFactory";
 import BaseService from "../../../../base/BaseService";
 import UserRepository from "../../../infrastructure/account/user/UserRepository";
 import { validPassword, hashPassword, makeCode } from "../../../../helper/Utility.js";
@@ -21,7 +21,7 @@ class UserService extends BaseService {
         };
 
         // Validate data and create object
-        const newUser = await createAdmin(data);
+        const newUser = await createValidate(data);``
         if (newUser.error) {
             response.statusCode = 400;
             response.json = {
@@ -66,7 +66,7 @@ class UserService extends BaseService {
         };
 
         // Validate data and create object
-        const newUser = await loginAdmin(data);
+        const newUser = await loginValidate(data);
         if (newUser.error) {
             response.statusCode = 400;
             response.json = {
@@ -97,6 +97,19 @@ class UserService extends BaseService {
             };
             return response;
         }
+        // create token
+        const payload = {
+            id: checkEmailResult.data.id,
+            email: checkEmailResult.data.email,
+            name: checkEmailResult.data.name,
+        }
+        const jwtToken = await createJWT(payload);
+        response.statusCode = 200;
+        response.json = {
+            success: true,
+            token: jwtToken,
+        }
+        return response;
     }
 
     // get all user 
@@ -108,6 +121,46 @@ class UserService extends BaseService {
 
         const offset = parseInt(process.env.PAGE_LIMIT) * page
         const result = await userRepository.findAll(offset, parseInt(process.env.PAGE_LIMIT));
+        if (!result) {
+            response.statusCode = 500;
+            response.json = {
+                message: result.message,
+            };
+            return response;
+        }
+
+        response.statusCode = 200;
+        response.json = result;
+        return response;
+    }
+
+    // get user by id
+    async getUserById(id) {
+        const response = {
+            json: null,
+            statusCode: null,
+        };
+        const result = await userRepository.findOneById(id);
+        if (!result) {
+            response.statusCode = 500;
+            response.json = {
+                message: result.message,
+            };
+            return response;
+        }
+
+        response.statusCode = 200;
+        response.json = result;
+        return response;
+    }
+
+    // get user by email
+    async getUserByEmail(email) {
+        const response = {
+            json: null,
+            statusCode: null,
+        };
+        const result = await userRepository.findOneByEmail(email);
         if (!result) {
             response.statusCode = 500;
             response.json = {

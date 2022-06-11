@@ -108,7 +108,7 @@ class AdminService extends BaseService {
     response.statusCode = 200;
 
     let user = admin.data
-    user.password = ''
+    delete user.password;
 
     response.json = {
       success: true,
@@ -183,14 +183,14 @@ class AdminService extends BaseService {
     });
 
     // create a admin object to make a new admin model from admin factory
-    const creatAdmin = {
+    const createAdmin = {
       email: email,
       password: password,
       fullName: 'admin',
     }
 
     //validate by admin factory
-    const newAdmin = await createAdmin(creatAdmin);
+    const newAdmin = await createAdmin(createAdmin);
     if (newAdmin.error) {
       response.statusCode = 400;
       response.json = {

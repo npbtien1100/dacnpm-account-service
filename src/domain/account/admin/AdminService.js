@@ -108,7 +108,7 @@ class AdminService extends BaseService {
     response.statusCode = 200;
 
     let user = admin.data
-    user.password = ''
+    delete user.password;
 
     response.json = {
       success: true,

@@ -4,7 +4,7 @@ import sequelize from "../../../../config/MySQLConfig";
 class User extends Model { }
 User.init(
     {
-        name: {
+        fullName: {
             type: DataTypes.STRING,
             allowNull: false,
         },

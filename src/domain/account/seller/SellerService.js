@@ -126,7 +126,7 @@ class SellerService extends BaseService {
     response.statusCode = 200;
 
     let user = seller.data;
-    user.password = "";
+    delete user.password;
 
     response.json = {
       success: true,

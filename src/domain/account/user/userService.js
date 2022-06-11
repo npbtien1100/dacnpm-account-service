@@ -1,5 +1,5 @@
 import autoBind from "auto-bind";
-import { createUser } from "./UserFactory";
+import { createValidate, loginValidate} from "./UserFactory";
 import BaseService from "../../../../base/BaseService";
 import UserRepository from "../../../infrastructure/account/user/UserRepository";
 import { validPassword, hashPassword, makeCode } from "../../../../helper/Utility.js";
@@ -21,7 +21,7 @@ class UserService extends BaseService {
         };
 
         // Validate data and create object
-        const newUser = await createAdmin(data);
+        const newUser = await createValidate(data);``
         if (newUser.error) {
             response.statusCode = 400;
             response.json = {
@@ -66,7 +66,7 @@ class UserService extends BaseService {
         };
 
         // Validate data and create object
-        const newUser = await loginAdmin(data);
+        const newUser = await loginValidate(data);
         if (newUser.error) {
             response.statusCode = 400;
             response.json = {

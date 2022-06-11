@@ -1,6 +1,7 @@
 import { User } from './UserDomainModel';
+import joi from "@hapi/joi";
 
-export const createUser = async (data) => {
+export const createValidate = async (data) => {
     const user = joi.object({
         phone: joi.optional(),
         address: joi.string().optional(),
@@ -27,6 +28,29 @@ export const createUser = async (data) => {
             data.phone,
             data.address,
         );
+    }
+    return newUser;
+}
+
+export const loginValidate = async (data) => {
+    const user = joi.object({
+        password: joi.string().required(),
+        email: joi.string().email().required(),
+    });
+
+    const newUser = {
+        info: {},
+        Message: "",
+        error: false
+    };
+
+    const validationResult = user.validate(data);
+
+    if (validationResult.error) {
+        newUser.error = true
+        newUser.Message = validationResult.error.details[0].message;
+    } else {
+        newUser.Message = "Validate Success"
     }
     return newUser;
 }

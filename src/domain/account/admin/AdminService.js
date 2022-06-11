@@ -224,6 +224,25 @@ class AdminService extends BaseService {
   async sendEmail(email, password) {
     return true;
   }
+
+  async check(id) {
+    const response = {
+      json: null,
+      statusCode: null,
+    };
+
+    const result = await adminRepository.findOneByID(id);
+    if (!result) {
+      response.statusCode = 500;
+      response.json = {
+        message: "Error when get admin",
+      };
+      return response;
+    }
+    response.json = result;
+    response.statusCode = 200;
+    return response;
+  }
 }
 
 export default new AdminService();

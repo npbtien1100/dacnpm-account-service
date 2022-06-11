@@ -4,7 +4,7 @@ import protoLoader from "@grpc/proto-loader";
 
 import adminService from "../src/domain/account/admin/AdminService";
 
-const PATH = "./config/adminGrpc.proto";
+const PATH = "./src/domain/account/admin/adminGrpc.proto";
 
 const grpcServer = new grpc.Server();
 
@@ -32,7 +32,12 @@ grpcServer.addService(adminProto.AdminService.service, {
     Get: async (request, callback) => {
         const result = await adminService.getOne(request.id);
         callback(null, result);
+    },
+    Check: async (request, callback) => {
+        const result = await adminService.check(request.id);
+        callback(null, result);
     }
+
 }
 );
 

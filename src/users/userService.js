@@ -1,6 +1,6 @@
+import autoBind from "auto-bind";
 import User from "./userModel";
 import BaseSevice from "../../base/BaseService";
-import autoBind from "auto-bind";
 
 class UserService extends BaseSevice {
   constructor() {
@@ -10,13 +10,14 @@ class UserService extends BaseSevice {
 
   async findOneByEmail(email) {
     try {
-      const foundUser = await this.model.findOne({ email: email });
+      const foundUser = await this.model.findOne({ email });
       return foundUser;
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
+
   async registerUser(data) {
     try {
       await this.model.create({

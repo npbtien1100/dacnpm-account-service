@@ -9,7 +9,7 @@ class BaseRepository {
   async findOneByEmail(email) {
     try {
       const foundUser = await this.model.findOne({
-        where: { email: email },
+        where: { email },
         raw: true,
       });
 

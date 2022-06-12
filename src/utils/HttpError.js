@@ -24,7 +24,7 @@ export default class HttpError {
           errorName = "ValidationError";
           break;
         case 400:
-          errorName = "BadRequestError"
+          errorName = "BadRequestError";
           break;
         case 401:
           errorName = "UnauthorizedError";

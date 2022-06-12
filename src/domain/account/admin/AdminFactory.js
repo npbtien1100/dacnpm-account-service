@@ -13,12 +13,12 @@ export const createAdmin = async (data) => {
   const newAdmin = {
     info: {},
     Message: "",
-    error: false
+    error: false,
   };
   const validationResult = admin.validate(data);
 
   if (validationResult.error) {
-    newAdmin.error = true
+    newAdmin.error = true;
     newAdmin.Message = validationResult.error.details[0].message;
   } else {
     newAdmin.info = new Admin(
@@ -41,14 +41,14 @@ export const loginAdmin = async (data) => {
 
   const validationResult = admin.validate(data);
 
-  let result = {
+  const result = {
     error: false,
-    message: ''
-  }
+    message: "",
+  };
 
-  if(validationResult.error){
-    result.message = validationResult.error.details[0].message
-    result.error = true
+  if (validationResult.error) {
+    result.message = validationResult.error.details[0].message;
+    result.error = true;
   }
   return result;
 };

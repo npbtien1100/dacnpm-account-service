@@ -1,6 +1,6 @@
+import autoBind from "auto-bind";
 import AdminService from "../../../domain/account/admin/AdminService.js";
 import BaseController from "../../../../base/BaseController.js";
-import autoBind from "auto-bind";
 
 // const adminService = new AdminService();
 

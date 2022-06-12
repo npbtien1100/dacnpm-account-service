@@ -10,7 +10,8 @@
     "start": "node --experimental-modules --es-module-specifier-resolution=node  src/application/server.js",
     "dev": "nodemon --experimental-modules --es-module-specifier-resolution=node  src/application/server.js",
     "pre-commit": "lint-staged",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint --fix --ext .js,.jsx ."
   },
   "author": "",
   "license": "ISC",
@@ -52,7 +53,8 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "rimraf": "^3.0.2",
-    "sequelize": "^6.7.0"
+    "sequelize": "^6.7.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",

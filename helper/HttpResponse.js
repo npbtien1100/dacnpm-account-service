@@ -1,13 +1,13 @@
-"use strict";
 const defaultExcludedItemsFromResponse = ["__v", "password"];
 
 export default class HttpResponse {
   error = false;
+
   responseTimestamp = new Date();
 
   constructor(
     data,
-    options = { totalCount: 0, statusCode: 200, deleted: null }
+    options = { totalCount: 0, statusCode: 200, deleted: null },
   ) {
     this.statusCode = options.statusCode || 200;
     let filteredData = data;

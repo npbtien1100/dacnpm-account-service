@@ -1,11 +1,10 @@
 // Handle business
 import autoBind from "auto-bind";
-import {loginAdmin, createAdmin} from "./AdminFactory";
+import { loginAdmin, createAdmin } from "./AdminFactory";
 import BaseService from "../../../../base/BaseService";
 import AdminRepository from "../../../infrastructure/account/admin/AdminRepository";
 import { validPassword, hashPassword, makeCode } from "../../../../helper/Utility.js";
 import { createJWT } from "../../../auth/auth.services";
-
 
 const adminRepository = new AdminRepository();
 
@@ -23,7 +22,7 @@ class AdminService extends BaseService {
 
     // Validate data and create object
     const newAdmin = await createAdmin(data);
-    if(newAdmin.error) {
+    if (newAdmin.error) {
       response.statusCode = 400;
       response.json = {
         message: newAdmin.Message,
@@ -34,9 +33,9 @@ class AdminService extends BaseService {
     // Check Email Exist
     const checkEmailResult = await adminRepository.findOneByEmail(data.email);
 
-    console.log(checkEmailResult)
+    console.log(checkEmailResult);
 
-    if(checkEmailResult.isSuccess){
+    if (checkEmailResult.isSuccess) {
       response.statusCode = 400;
       response.json = {
         success: false,
@@ -71,7 +70,7 @@ class AdminService extends BaseService {
 
     // Validate
 
-    const result = await loginAdmin(data)
+    const result = await loginAdmin(data);
     if (result.error) {
       response.statusCode = 400;
       response.json = {
@@ -91,7 +90,7 @@ class AdminService extends BaseService {
       return response;
     }
 
-    //Check Password
+    // Check Password
     const isValid = await validPassword(data.password, admin.data.password);
     if (!isValid) {
       response.statusCode = 400;
@@ -102,20 +101,20 @@ class AdminService extends BaseService {
       return response;
     }
 
-    //JWT
+    // JWT
     const token = createJWT({ id: admin.data.id });
 
     response.statusCode = 200;
 
-    let user = admin.data
-    user.password = ''
+    const user = admin.data;
+    user.password = "";
 
     response.json = {
       success: true,
-      user: user,
-      token: token,
+      user,
+      token,
       expiresIn: 10000000,
-    }
+    };
     return response;
   }
 }

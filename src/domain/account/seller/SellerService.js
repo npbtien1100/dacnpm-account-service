@@ -1,8 +1,9 @@
 // Handle business
 import autoBind from "auto-bind";
-import { loginSeller, createSeller } from "./SellerFactory";
+import { loginSeller, createSeller, updateSeller } from "./SellerFactory";
 import BaseService from "../../../../base/BaseService";
 import SellerRepository from "../../../infrastructure/account/seller/SellerRepository";
+
 import {
   validPassword,
   hashPassword,
@@ -12,6 +13,7 @@ import { createJWT } from "../../../auth/auth.services";
 import MailerHepler from "../../../../helper/email/EmailHelper";
 
 const sellerRepository = new SellerRepository();
+import { addToLog } from "../../../infrastructure/account/seller/sellerLog.repo";
 
 class SellerService extends BaseService {
   constructor() {
@@ -47,16 +49,15 @@ class SellerService extends BaseService {
       return response;
     }
 
-    // HashPassword
-    newASeller.info.password = await hashPassword(newASeller.info.password);
+    //hash password
+    newASeller.info.data.password = await hashPassword(
+      newASeller.info.data.password
+    );
 
-    const code = makeCode();
-    // console.log(code);
-    newASeller.info.code = code;
-    console.log(newASeller.info);
+    newASeller.info.data = JSON.stringify(newASeller.info.data);
 
-    // Create new sller
-    const result = await sellerRepository.create(newASeller.info);
+    const result = await addToLog(newASeller.info);
+
     if (!result.isSuccess) {
       response.statusCode = 500;
       response.json = {
@@ -64,18 +65,6 @@ class SellerService extends BaseService {
       };
       return response;
     }
-
-    //Send Email to seller
-    const mailer = new MailerHepler();
-
-    const seller = {
-      link: process.env.URL_FRONT_END + "/api/verify-seller?code=" + code,
-    };
-    const mailResult = await mailer.sendRegisterSeller(
-      "SHOPPING",
-      data.email,
-      seller
-    );
 
     response.json = result;
     response.statusCode = 200;
@@ -109,7 +98,7 @@ class SellerService extends BaseService {
       };
       return response;
     }
-    //Check Password
+    // Check Password
     const isValid = await validPassword(data.password, seller.data.password);
     if (!isValid) {
       response.statusCode = 400;
@@ -119,21 +108,70 @@ class SellerService extends BaseService {
       };
       return response;
     }
+    //check verify email
+    // console.log(seller);
+    if (!seller.data.isVerified) {
+      response.statusCode = 400;
+      response.json = {
+        error: true,
+        message: "Please verify your email before login.",
+      };
+      return response;
+    }
 
-    //JWT
+    // JWT
     const token = createJWT({ id: seller.data.id });
 
     response.statusCode = 200;
 
-    let user = seller.data;
+    const user = seller.data;
     user.password = "";
 
     response.json = {
       success: true,
-      user: user,
-      token: token,
+      user,
+      token,
       expiresIn: 10000000,
     };
+    return response;
+  }
+
+  async getSellerById(id) {
+    const response = {
+      json: null,
+      statusCode: null,
+    };
+    const result = await sellerRepository.findOneById(id);
+    if (!result.isSuccess) {
+      response.statusCode = 400;
+      response.json = {
+        message: result.message,
+      };
+      return response;
+    }
+    response.statusCode = 200;
+    response.json = result;
+    return response;
+  }
+  async updateSeller(id, data) {
+    const response = {
+      json: null,
+      statusCode: null,
+    };
+    // Add to log
+    const sellerModel = await updateSeller(id, data);
+    const result = await addToLog(sellerModel);
+    if (!result.isSuccess) {
+      response.statusCode = 500;
+      response.json = {
+        message: result.message,
+      };
+    } else {
+      response.statusCode = 200;
+      response.json = {
+        message: "Update successfully",
+      };
+    }
     return response;
   }
 }

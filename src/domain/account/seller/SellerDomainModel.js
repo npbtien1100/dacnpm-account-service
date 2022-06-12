@@ -10,7 +10,7 @@ export class Seller {
     frontIdCardImage,
     backIdCardImage,
     portrait,
-    isVerified
+    isVerified,
   ) {
     this.email = email;
     this.password = password;

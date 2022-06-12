@@ -4,11 +4,15 @@ import sequelize from "../../../../config/MySQLConfig";
 class Seller extends Model {}
 Seller.init(
   {
+    id: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
     email: {
       type: DataTypes.STRING,
       default: "",
     },
-    name: {
+    fullName: {
       type: DataTypes.STRING,
       default: "",
     },

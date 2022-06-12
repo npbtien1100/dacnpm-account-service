@@ -21,10 +21,11 @@ class SaveHelper {
           } else {
             resolve(result);
           }
-        }
+        },
       );
     });
   }
+
   saveVideo(file) {
     return new Promise((resolve, reject) => {
       cloudinary.v2.uploader.upload(
@@ -39,7 +40,7 @@ class SaveHelper {
           } else {
             resolve(result);
           }
-        }
+        },
       );
     });
   }

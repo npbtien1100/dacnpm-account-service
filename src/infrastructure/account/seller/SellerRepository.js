@@ -8,6 +8,30 @@ class SellerRepository extends BaseRepository {
     super(SellerModel);
     autoBind(this);
   }
+
+  async findOneById(id) {
+    try {
+      const foundUser = await this.model.findOne({
+        where: { id },
+        raw: true,
+      });
+
+      if (foundUser) {
+        return {
+          isSuccess: true,
+          data: foundUser,
+        };
+      }
+      return {
+        isSuccess: false,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        isSuccess: false,
+      };
+    }
+  }
 }
 
 export default SellerRepository;

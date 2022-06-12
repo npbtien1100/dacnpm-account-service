@@ -1,6 +1,6 @@
-import SellerService from "../../../domain/account/seller/SellerService.js";
-import BaseController from "../../../../base/BaseController.js";
 import autoBind from "auto-bind";
+import SellerService from "../../../domain/account/seller/SellerService.js";
+import BaseController from "../../../../base/BaseController";
 
 const sellerService = new SellerService();
 
@@ -25,6 +25,25 @@ class SellerController extends BaseController {
       const data = req.body;
       const result = await sellerService.register(data);
 
+      res.status(result.statusCode).json(result.json);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async getSellerById(req, res, next) {
+    try {
+      const id = req.params.id;
+      const result = await sellerService.getSellerById(id);
+      res.status(result.statusCode).json(result.json);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async updateSeller(req, res, next) {
+    try {
+      const id = req.params.id;
+      const data = req.body;
+      const result = await sellerService.updateSeller(id, data);
       res.status(result.statusCode).json(result.json);
     } catch (error) {
       console.log(error);

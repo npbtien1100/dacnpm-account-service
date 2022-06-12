@@ -3,16 +3,18 @@ import express from "express";
 import "dotenv/config";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import grpc from "@grpc/grpc-js";
 
 // routes
 // import userRouter from "./users/userRouter";
 import passport from "passport";
 import cors from "cors";
-import adminRouter from "./admin/AdminRouter";
-// import sellerRouter from "./seller/sellerRouter";
+import adminRouter from "./account/admin/AdminRouter";
+import sellerRouter from "./account/seller/SellerRouter";
+import userRouter from "./account/user/UserRouter";
 
 import configPassport from "../../config/passport";
-
+import grpcServer from "../../config/grpcServerConfig";
 // DB config
 import db from "../../config/MySQLConfig";
 
@@ -46,7 +48,8 @@ app.use(passport.initialize());
 // app.use("/api/auth", authRouter);
 // app.use("/api/users", userRouter);
 app.use("/api/admin", adminRouter);
-// app.use("/api/seller", sellerRouter);
+app.use("/api/seller", sellerRouter);
+app.use("/api/user", userRouter);
 // arrow functions
 const port = process.env.PORT || 5000;
 const server = app.listen(port, () => {
@@ -56,5 +59,14 @@ const server = app.listen(port, () => {
   // string interpolation:
   console.log(`Example app listening at http://${address}:${currentPort}`);
 });
+
+grpcServer.bindAsync(
+  "127.0.0.1:50051",
+  grpc.ServerCredentials.createInsecure(),
+  (error, port) => {
+    console.log(" GRPC Server running at http://127.0.0.1:50051");
+    grpcServer.start();
+  }
+);
 
 export default app;

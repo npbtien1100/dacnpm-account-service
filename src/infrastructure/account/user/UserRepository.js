@@ -40,6 +40,14 @@ class UserRepository extends BaseRepository {
     //     const result = await this.model.create(data);
     //     return result;
     // }
+
+    async findOneByNameAndId(id, name) {
+        const result = await this.model.findOne({
+            where: { id: id, name: name },
+            raw: true
+        });
+        return result;
+    }
 }
 
 export default UserRepository;

@@ -6,7 +6,7 @@ syntax = "proto3";
 message Empty {}
 
 // mesage trong protobuf là các thể hiện của các class hoặc object trong các ngôn ngữ lập trình khác
-message Admin{
+message User{
     // các số 1 2 3 4 là các số viết theo định dạng của file proto. Do protocol
     // buffer lưu dữ liệu dưới dạng binary nên ta phải định danh các field bằng số này 
     string id = 1;
@@ -17,12 +17,12 @@ message Admin{
 }
 
 // ta định nghĩa một actor id chỉ chứa một số nguyên là id của actor trong data base
-message AdminId{
+message UserId{
     int32 id = 1;
 }
-message AdminList {
+message UserList {
     // từ khoá repated đóng vai trò là một danh sách (mảng)
-   repeated Admin admin = 1;
+   repeated User User = 1;
 }
 
 // định nghĩa một message có chức năng thông báo số dòng bị affect khi thực hiện câu lệnh SQL
@@ -30,15 +30,14 @@ message AffectedRows{
     string rows = 1;
 }
 
-message isAdmin{
-    bool isAdmin = 1;
+message isUser{
+    bool isUser = 1;
 }
 
-message AdminNameandId{
+message UserNameAndId{
     string name = 1;
     int32 id = 2;
 }
-
 // message ActorWithId{
 //     string last_name = 1;
 //     string actor_id = 2;
@@ -47,10 +46,10 @@ message AdminNameandId{
 
 // từ khoá service để định nghĩa một service (một gói hàm)
 // service list nhận một message rỗng và trả về list các actor
-service AdminService {
-    rpc List (Empty) returns (AdminList) {};
-    // hàm kiểm tra có tồn tại admin này không
-    rpc Get (AdminId) returns (Admin) {};
-    // hàm kiểm tra admin
-    rpc Check (AdminNameandId) returns (isAdmin) {};
+service UserService {
+    rpc List (Empty) returns (UserList) {};
+    // hàm kiểm tra có tồn tại User này không
+    rpc Get (UserId) returns (User) {};
+    // hàm kiểm tra User
+    rpc Check (UserNameAndId) returns (isUser) {};
 }

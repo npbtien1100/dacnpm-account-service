@@ -1,5 +1,5 @@
 import autoBind from "auto-bind";
-import { createValidate, loginValidate} from "./UserFactory";
+import { createValidate, loginValidate } from "./UserFactory";
 import BaseService from "../../../../base/BaseService";
 import UserRepository from "../../../infrastructure/account/user/UserRepository";
 import { validPassword, hashPassword, makeCode } from "../../../../helper/Utility.js";
@@ -21,7 +21,7 @@ class UserService extends BaseService {
         };
 
         // Validate data and create object
-        const newUser = await createValidate(data);``
+        const newUser = await createValidate(data); ``
         if (newUser.error) {
             response.statusCode = 400;
             response.json = {
@@ -152,6 +152,24 @@ class UserService extends BaseService {
         response.statusCode = 200;
         response.json = result;
         return response;
+    }
+
+    async checkUserExist(id, name) {
+        const response = {
+            json: null,
+            statusCode: null,
+        };
+        const result = await userRepository.findOneByNameAndId(id);
+        if (!result) {
+            response.statusCode = 500;
+            response.json = {
+                message: result.message,
+            };
+        }
+        response.statusCode = 200;
+        response.json = result;
+        return response;
+
     }
 
     // get user by email

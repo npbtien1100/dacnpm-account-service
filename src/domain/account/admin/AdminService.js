@@ -225,13 +225,13 @@ class AdminService extends BaseService {
     return true;
   }
 
-  async check(id) {
+  async checkAdminExist(id, name) {
     const response = {
       json: null,
       statusCode: null,
     };
 
-    const result = await adminRepository.findOneByID(id);
+    const result = await adminRepository.findOneByNameAndId(id, name);
     if (!result) {
       response.statusCode = 500;
       response.json = {

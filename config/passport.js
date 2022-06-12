@@ -14,19 +14,18 @@ const opts = {
 
 export default (passport) => {
   passport.use(
-    new JwtStrategy.Strategy(opts, async function (jwt_payload, done) {
+    new JwtStrategy.Strategy(opts, (async (jwt_payload, done) => {
       try {
         // const user = await findOneById(jwt_payload.id);
         const user = { ...jwt_payload };
         if (user) {
           return done(null, user);
-        } else {
-          return done(null, false);
         }
+        return done(null, false);
       } catch (error) {
         console.log(error);
       }
-    })
+    })),
   );
 
   passport.use(
@@ -50,14 +49,14 @@ export default (passport) => {
               name: profile._json.name,
               image: profile._json.picture.data.url,
               registerType: "socialLinked",
-            }
+            },
           );
           return done(null, user);
         } catch (error) {
           return done(error, false);
         }
-      }
-    )
+      },
+    ),
   );
 
   passport.use(
@@ -67,7 +66,7 @@ export default (passport) => {
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: process.env.GOOGLE_CALLBACK_URL,
       },
-      async function (accessToken, refreshToken, profile, done) {
+      (async (accessToken, refreshToken, profile, done) => {
         try {
           console.log({ profile });
           const user = profile;
@@ -84,7 +83,7 @@ export default (passport) => {
         } catch (error) {
           return done(error, false);
         }
-      }
-    )
+      }),
+    ),
   );
 };

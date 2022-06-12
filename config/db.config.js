@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
-mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => console.log("DBConnection Successful"))
-  .catch((err) => {
-    console.log(err);
-  });
+// mongoose
+//   .connect(process.env.MONGO_URL)
+//   .then(() => console.log("DBConnection Successful"))
+//   .catch((err) => {
+//     console.log(err);
+//   });
 
-export default mongoose;
+// export default mongoose;

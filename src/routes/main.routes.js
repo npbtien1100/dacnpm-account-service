@@ -1,5 +1,6 @@
 // Import node module
 import express from "express";
+
 const router = express.Router();
 
 // Arrow functions

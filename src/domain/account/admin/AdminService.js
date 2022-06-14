@@ -1,13 +1,19 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+/* eslint-disable class-methods-use-this */
 // Handle business
 import autoBind from "auto-bind";
-import { loginAdmin, createAdmin } from "./AdminFactory";
+
+import { createAdminsFromArray, createAdmin } from "./AdminFactory";
+import { hashPassword } from "../../../utils/Utility";
 import BaseService from "../../../../base/BaseService";
 import AdminRepository from "../../../infrastructure/account/admin/AdminRepository";
-import { validPassword, hashPassword, makeCode } from "../../../../helper/Utility.js";
-import { createJWT } from "../../../auth/auth.services";
-import generator from 'generate-password';
+import HttpError from "../../../utils/HttpError";
+import HttpResponse from "../../../utils/HttpResponse";
+import MailerHepler from "../../../../helper/email/EmailHelper";
 
 const adminRepository = new AdminRepository();
+const emailer = new MailerHepler();
 
 class AdminService extends BaseService {
   constructor() {
@@ -22,27 +28,21 @@ class AdminService extends BaseService {
     };
 
     // Validate data and create object
-    const newAdmin = await createAdmin(data);
-    if (newAdmin.error) {
-      response.statusCode = 400;
-      response.json = {
-        message: newAdmin.Message,
-      };
-      return response;
+    const newAdmin = createAdmin(data);
+    if (newAdmin.errMessage) {
+      return new HttpError({ statusCode: 400, message: newAdmin.errMessage });
     }
 
     // Check Email Exist
     const checkEmailResult = await adminRepository.findOneByEmail(data.email);
 
-    console.log(checkEmailResult)
+    console.log(checkEmailResult);
 
-    if (checkEmailResult.isSuccess) {
-      response.statusCode = 400;
-      response.json = {
-        success: false,
+    if (!checkEmailResult.isSuccess) {
+      return new HttpError({
+        statusCode: 400,
         message: "Email has already registered",
-      };
-      return response;
+      });
     }
 
     // HashPassword
@@ -71,7 +71,7 @@ class AdminService extends BaseService {
 
     // Validate
 
-    const result = await loginAdmin(data)
+    const result = await loginAdmin(data);
     if (result.error) {
       response.statusCode = 400;
       response.json = {
@@ -91,7 +91,7 @@ class AdminService extends BaseService {
       return response;
     }
 
-    //Check Password
+    // Check Password
     const isValid = await validPassword(data.password, admin.data.password);
     if (!isValid) {
       response.statusCode = 400;
@@ -102,20 +102,20 @@ class AdminService extends BaseService {
       return response;
     }
 
-    //JWT
+    // JWT
     const token = createJWT({ id: admin.data.id });
 
     response.statusCode = 200;
 
-    let user = admin.data
+    const user = admin.data;
     delete user.password;
 
     response.json = {
       success: true,
-      user: user,
-      token: token,
+      user,
+      token,
       expiresIn: 10000000,
-    }
+    };
     return response;
   }
 
@@ -157,7 +157,6 @@ class AdminService extends BaseService {
     return response;
   }
 
-
   // the service for create new admin by email
   async createFromEmail(email) {
     const response = {
@@ -179,18 +178,18 @@ class AdminService extends BaseService {
     // generate password
     const password = generator.generate({
       length: 8,
-      numbers: true
+      numbers: true,
     });
 
     // create a admin object to make a new admin model from admin factory
-    const createAdmin = {
-      email: email,
-      password: password,
-      fullName: 'admin',
-    }
+    const createdAdmin = {
+      email,
+      password,
+      fullName: "admin",
+    };
 
-    //validate by admin factory
-    const newAdmin = await createAdmin(createAdmin);
+    // validate by admin factory
+    const newAdmin = await createAdmin(createdAdmin);
     if (newAdmin.error) {
       response.statusCode = 400;
       response.json = {
@@ -212,8 +211,11 @@ class AdminService extends BaseService {
       return response;
     }
 
-    console.log("successfully created admin with email: " + email + " and password: " + password);
+    console.log(
+      `successfully created admin with email: ${email} and password: ${password}`,
+    );
     // sending Email to new admin
+    // eslint-disable-next-line no-unused-vars
     const emailResult = await this.sendEmail(email, password);
     response.json = result;
     response.statusCode = 200;
@@ -223,6 +225,34 @@ class AdminService extends BaseService {
   // the service for sending email to new admin
   async sendEmail(email, password) {
     return true;
+  }
+
+  async inviteAdmins(emails) {
+    const admins = createAdminsFromArray(emails);
+
+    if (admins.errMessage) {
+      return new HttpError({ statusCode: 400, message: admins.errMessage });
+    }
+    // send mails
+    const infos = await Promise.all([
+      ...admins.info.map((admin) => emailer.sendInvitationsToAdmin(admin)),
+    ]);
+    infos.map((e) => console.log(`Email sent: ${e.response}`));
+
+    // insert into db
+    const tempAdmins = admins.info.map(async (admin) => {
+      admin.password = await hashPassword(admin.password);
+      return admin;
+    });
+    const newAdmins = await Promise.all(tempAdmins);
+    const result = await this.repository.createMany(newAdmins);
+
+    if (!result.isSuccess) return new HttpError(result.error);
+
+    return new HttpResponse({
+      isSuccess: true,
+      message: "Create invitations successfully!",
+    });
   }
 }
 

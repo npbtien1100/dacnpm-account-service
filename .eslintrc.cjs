@@ -16,5 +16,6 @@ module.exports = {
     quotes: ["error", "double"],
     "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
     "no-param-reassign": [0],
+    "linebreak-style": ["off", "windows"],
   },
 };

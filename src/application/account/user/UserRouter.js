@@ -1,5 +1,6 @@
 import express from "express";
 import UserController from "./UserController";
+
 const router = express.Router();
 
 router.get("/", UserController.getAll);

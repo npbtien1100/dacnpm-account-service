@@ -159,7 +159,7 @@ class UserService extends BaseService {
             json: null,
             statusCode: null,
         };
-        const result = await userRepository.findOneByNameAndId(id);
+        const result = await userRepository.findOneByNameAndId(id, name);
         if (!result) {
             response.statusCode = 500;
             response.json = {

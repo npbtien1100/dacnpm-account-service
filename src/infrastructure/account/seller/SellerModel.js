@@ -8,7 +8,7 @@ Seller.init(
       type: DataTypes.STRING,
       default: "",
     },
-    name: {
+    fullName: {
       type: DataTypes.STRING,
       default: "",
     },
@@ -57,7 +57,7 @@ Seller.init(
     sequelize,
     modelName: "seller",
     paranoid: true,
-  }
+  },
 );
 
 export default Seller;

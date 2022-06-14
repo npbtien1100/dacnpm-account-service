@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import joi from "@hapi/joi";
 import { Seller } from "./SellerDomainModel";
 
@@ -25,7 +26,17 @@ export const createSeller = async (data) => {
       data.email,
       data.password,
       data.fullName,
-      data.phone
+      data.phone || "",
+      data.idCardNumber || "",
+      data.taxCode || "",
+      data.address || "",
+      data.frontIdCardImage ||
+        "https://res.cloudinary.com/dnvgrzylh/image/upload/v1652375647/frontCard_usvrlr.png",
+      data.backIdCardImage ||
+        "https://res.cloudinary.com/dnvgrzylh/image/upload/v1652375698/backCard_t9jrnl.jpg",
+      data.portrait ||
+        "https://res.cloudinary.com/dnvgrzylh/image/upload/v1652376072/portraitAvatar_cbzmc7.jpg",
+      data.isVerified || 0,
     );
   }
 
@@ -40,7 +51,7 @@ export const loginSeller = async (data) => {
 
   const validationResult = seller.validate(data);
 
-  let result = {
+  const result = {
     error: false,
     message: "",
   };

@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 // Handle business
 import autoBind from "auto-bind";
 import { loginSeller, createSeller } from "./SellerFactory";
@@ -7,7 +8,7 @@ import {
   validPassword,
   hashPassword,
   makeCode,
-} from "../../../../helper/Utility.js";
+} from "../../../../helper/Utility";
 import { createJWT } from "../../../auth/auth.services";
 import MailerHepler from "../../../../helper/email/EmailHelper";
 
@@ -65,16 +66,17 @@ class SellerService extends BaseService {
       return response;
     }
 
-    //Send Email to seller
+    // Send Email to seller
     const mailer = new MailerHepler();
 
     const seller = {
-      link: process.env.URL_FRONT_END + "/api/verify-seller?code=" + code,
+      link: `${process.env.URL_FRONT_END}/api/verify-seller?code=${code}`,
     };
+    // eslint-disable-next-line no-unused-vars
     const mailResult = await mailer.sendRegisterSeller(
       "SHOPPING",
       data.email,
-      seller
+      seller,
     );
 
     response.json = result;
@@ -109,7 +111,7 @@ class SellerService extends BaseService {
       };
       return response;
     }
-    //Check Password
+    // Check Password
     const isValid = await validPassword(data.password, seller.data.password);
     if (!isValid) {
       response.statusCode = 400;
@@ -120,18 +122,18 @@ class SellerService extends BaseService {
       return response;
     }
 
-    //JWT
+    // JWT
     const token = createJWT({ id: seller.data.id });
 
     response.statusCode = 200;
 
-    let user = seller.data;
+    const user = seller.data;
     delete user.password;
 
     response.json = {
       success: true,
-      user: user,
-      token: token,
+      user,
+      token,
       expiresIn: 10000000,
     };
     return response;

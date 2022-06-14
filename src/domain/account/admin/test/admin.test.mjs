@@ -25,7 +25,7 @@ describe("Validate admin", () => {
         address: "TPHCM",
       },
       Message: "",
-      error: false
+      error: false,
     });
   });
 });

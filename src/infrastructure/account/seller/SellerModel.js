@@ -57,7 +57,7 @@ Seller.init(
     sequelize,
     modelName: "seller",
     paranoid: true,
-  }
+  },
 );
 
 export default Seller;

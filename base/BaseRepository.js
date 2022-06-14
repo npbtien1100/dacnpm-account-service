@@ -9,7 +9,7 @@ class BaseRepository {
   async findOneByEmail(email) {
     try {
       const foundUser = await this.model.findOne({
-        where: { email: email },
+        where: { email },
         raw: true,
       });
 
@@ -43,6 +43,24 @@ class BaseRepository {
       return {
         isSuccess: false,
         error: error.message || "Some error occurred while creating User!",
+      };
+    }
+  }
+
+  async createMany(dataArray) {
+    try {
+      await this.model.bulkCreate(dataArray);
+      return {
+        isSuccess: true,
+        message: `Create ${this.model.tableName}s successfully!`,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        isSuccess: false,
+        error:
+          error.message
+          || `Some error occurred while creating ${this.model.tableName}s`,
       };
     }
   }

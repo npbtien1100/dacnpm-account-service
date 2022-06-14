@@ -1,8 +1,8 @@
-import AdminService from "../../../domain/account/admin/AdminService.js";
-import BaseController from "../../../../base/BaseController.js";
+/* eslint-disable class-methods-use-this */
 import autoBind from "auto-bind";
-import { getPage } from "../../../../utils/Pagination.js";
-
+import AdminService from "../../../domain/account/admin/AdminService";
+import BaseController from "../../../../base/BaseController";
+import { getPage } from "../../../../utils/Pagination";
 
 // const adminService = new AdminService();
 
@@ -12,7 +12,7 @@ class AdminController extends BaseController {
     autoBind(this);
   }
 
-  async login(req, res, next) {
+  async login(req, res) {
     try {
       const data = req.body;
       const result = await AdminService.loginAdmin(data);
@@ -22,7 +22,7 @@ class AdminController extends BaseController {
     }
   }
 
-  async register(req, res, next) {
+  async register(req, res) {
     try {
       const data = req.body;
       const result = await AdminService.createAnAdmin(data);
@@ -33,11 +33,11 @@ class AdminController extends BaseController {
     }
   }
 
-  async getAll(req, res, next) {
+  async getAll(req, res) {
     try {
       const reqpage = req.query.page;
       const page = getPage(reqpage);
-      const limit = parseInt(process.env.PAGE_LIMIT);
+      const limit = parseInt(process.env.PAGE_LIMIT, 10);
       const result = await AdminService.getAll(page, limit);
       res.status(result.statusCode).json(result.json);
     } catch (error) {
@@ -45,9 +45,9 @@ class AdminController extends BaseController {
     }
   }
 
-  async getOne(req, res, next) {
+  async getOne(req, res) {
     try {
-      const id = req.params.id;
+      const { id } = req.params;
       const result = await AdminService.getOne(id);
       res.status(result.statusCode).json(result.json);
     } catch (error) {
@@ -55,9 +55,9 @@ class AdminController extends BaseController {
     }
   }
 
-  async createFromEmail(req, res, next) {
+  async createFromEmail(req, res) {
     try {
-      const email = req.body.email;
+      const { email } = req.body;
       const result = await AdminService.createFromEmail(email);
       res.status(result.statusCode).json(result.json);
     } catch (error) {

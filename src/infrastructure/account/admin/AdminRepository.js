@@ -10,20 +10,18 @@ class AdminRepository extends BaseRepository {
   }
 
   async findAll(page, limit) {
-    const result = await this.model.findAll(
-      {
-        offset: page,
-        limit: limit,
-        raw: true
-      }
-    );
+    const result = await this.model.findAll({
+      offset: page,
+      limit,
+      raw: true,
+    });
     return result;
   }
 
   async findOneByID(id) {
     const result = await this.model.findOne({
-      where: { id: id },
-      raw: true
+      where: { id },
+      raw: true,
     });
     return result;
   }

@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 export class Seller {
   constructor(
     email,
@@ -10,7 +11,7 @@ export class Seller {
     frontIdCardImage,
     backIdCardImage,
     portrait,
-    isVerified
+    isVerified,
   ) {
     this.email = email;
     this.password = password;

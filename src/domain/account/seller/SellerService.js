@@ -4,13 +4,8 @@ import { loginSeller, createSeller, updateSeller } from "./SellerFactory";
 import BaseService from "../../../../base/BaseService";
 import SellerRepository from "../../../infrastructure/account/seller/SellerRepository";
 
-import {
-  validPassword,
-  hashPassword,
-  makeCode,
-} from "../../../../helper/Utility.js";
+import { validPassword, hashPassword } from "../../../../helper/Utility.js";
 import { createJWT } from "../../../auth/auth.services";
-import MailerHepler from "../../../../helper/email/EmailHelper";
 
 const sellerRepository = new SellerRepository();
 import { addToLog } from "../../../infrastructure/account/seller/sellerLog.repo";
@@ -109,15 +104,14 @@ class SellerService extends BaseService {
       return response;
     }
     //check verify email
-    // console.log(seller);
-    if (!seller.data.isVerified) {
-      response.statusCode = 400;
-      response.json = {
-        error: true,
-        message: "Please verify your email before login.",
-      };
-      return response;
-    }
+    // if (!seller.data.isVerified) {
+    //   response.statusCode = 400;
+    //   response.json = {
+    //     error: true,
+    //     message: "Please verify your email before login.",
+    //   };
+    //   return response;
+    // }
 
     // JWT
     const token = createJWT({ id: seller.data.id });
@@ -160,7 +154,9 @@ class SellerService extends BaseService {
     };
     // Add to log
     const sellerModel = await updateSeller(id, data);
+
     const result = await addToLog(sellerModel);
+
     if (!result.isSuccess) {
       response.statusCode = 500;
       response.json = {

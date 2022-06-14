@@ -63,7 +63,7 @@ export const updateSeller = async (id, data) => {
   const seller = joi.object({
     phone: joi.optional(),
     address: joi.string().optional(),
-    password: joi.string().optional(),
+    // password: joi.string().optional(),
     email: joi.string().email().optional(),
     fullName: joi.string().min(2).max(50).optional(),
   });

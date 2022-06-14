@@ -13,13 +13,14 @@ export const createAdmin = (data) => {
 
   const newAdmin = {
     info: {},
-    errMessage: "",
+    Message: "",
+    error: false,
   };
   const validationResult = admin.validate(data);
 
   if (validationResult.error) {
-    console.log(validationResult.error.details[0].message);
-    newAdmin.errMessage = validationResult.error.details[0].message;
+    newAdmin.error = true;
+    newAdmin.Message = validationResult.error.details[0].message;
   } else {
     newAdmin.info = new Admin(
       data.email,

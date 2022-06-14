@@ -1,14 +1,15 @@
 import express from "express";
-const router = express.Router();
 import passport from "passport";
 import { createJWT, authenticateByJwt } from "./auth.services";
+
+const router = express.Router();
 
 const responseAfterAuthorizing = (req, res, next) => {
   const token = createJWT({ id: req.user.id });
   const user = {
     error: false,
     user: { id: req.user.id, name: req.user.name, image: req.user.image },
-    token: token,
+    token,
     expiresIn: 10000000,
   };
   const strUser = JSON.stringify(user);
@@ -22,7 +23,7 @@ router.get("/get-token", (req, res, next) => {
 router.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/api/auth/failure" }),
-  function (req, res) {
+  (req, res) => {
     res.status(200).send({ message: "Login success", user: req.user });
   }
 );

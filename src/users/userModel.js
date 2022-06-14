@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
     mailSecretCode: { type: String },
     registerType: { type: String },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const userModel = mongoose.model("User", userSchema);
